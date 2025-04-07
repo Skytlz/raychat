@@ -50,7 +50,7 @@ bool load_file(const char *filepath, Pairs *pairs) {
 
   size_t items_count = loaded_pairs.count / sizeof(*pairs->items);
   for (size_t i = 0; i < items_count; ++i) {
-    append_pairs(pairs, loaded_pairs.items[i]);
+    append(pairs, loaded_pairs.items[i]);
   }
 
   return true;
@@ -62,31 +62,9 @@ typedef struct {
   size_t capacity;
 } String;
 
-void reserve_space_str(String *string, size_t space) {
-  if (space > string->capacity) {
-    if (string->capacity == 0) {
-      string->capacity = 256;
-    }
-    while (space > string->capacity) {
-      string->capacity *= 2;
-    }
-    string->items =
-        realloc(string->items, string->capacity * sizeof(*string->items));
-    if (string->items == NULL) {
-      printf("FAILURE TO REALLOCATE");
-      return;
-    }
-  }
-}
-
-void append_str(String *string, char c) {
-  reserve_space_str(string, string->count + 1);
-  string->items[string->count++] = c;
-}
-
 void render_token(uint32_t token, Pairs pairs, String *string) {
   if (token == pairs.items[token].l) {
-    append_str(string, (char)token);
+    append(string, (char)token);
     return;
   }
 

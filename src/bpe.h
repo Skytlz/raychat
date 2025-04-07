@@ -15,26 +15,24 @@ typedef struct {
   size_t capacity;
 } Pairs;
 
-void reserve_space_pairs(Pairs *pairs, size_t space) {
-  if (space > pairs->capacity) {
-    if (pairs->capacity == 0) {
-      pairs->capacity = 256;
-    }
-    while (space > pairs->capacity) {
-      pairs->capacity *= 2;
-    }
-    pairs->items =
-        realloc(pairs->items, pairs->capacity * sizeof(*pairs->items));
-    if (pairs->items == NULL) {
-      printf("FAILURE TO REALLOCATE");
-      return;
-    }
-  }
-}
+#define reserve_space(a, c)                                                    \
+  do {                                                                         \
+    if ((c) > (a)->capacity) {                                                 \
+      if ((a)->capacity == 0) {                                                \
+        (a)->capacity = 256;                                                   \
+      }                                                                        \
+      while ((c) > (a)->capacity) {                                            \
+        (a)->capacity *= 2;                                                    \
+      }                                                                        \
+      (a)->items = realloc((a)->items, (a)->capacity * sizeof(*(a)->items));   \
+      assert((a)->items != NULL);                                              \
+    }                                                                          \
+  } while (0)
 
-void append_pairs(Pairs *pairs, Pair p) {
-  reserve_space_pairs(pairs, pairs->count + 1);
-  pairs->items[pairs->count++] = p;
-}
+#define append(a, i)                                                           \
+  do {                                                                         \
+    reserve_space((a), (a)->count + 1);                                        \
+    (a)->items[(a)->count++] = (i);                                            \
+  } while (0)
 
 #endif // BPE_H_

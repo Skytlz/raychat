@@ -49,7 +49,7 @@ bool load_file(const char *filepath, Pairs *pairs) {
 
   size_t items_count = loaded_pairs.count / sizeof(*pairs->items);
   for (size_t i = 0; i < items_count; ++i) {
-    append_pairs(pairs, loaded_pairs.items[i]);
+    append(pairs, loaded_pairs.items[i]);
   }
 
   return true;
